@@ -5,7 +5,6 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import Appointment from "components/Appointment";
 import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "helpers/selectors"
-import useVisualMode from "hooks/useVisualMode"
 
 
 export default function Application(props) {
@@ -46,7 +45,23 @@ export default function Application(props) {
     // setState({...state, appointments})
 
     return axios.put(`/api/appointments/${id}`, appointment)
-    .then(() => setState({...state, appointments}))
+      .then(() => setState({...state, appointments}))
+  }
+
+  function cancelInterview(id) {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+
+    return axios.delete(`/api/appointments/${id}`, state.appointments[id])
+      .then(() => {
+        setState({...state, appointments})
+      })
 
   }
 
@@ -63,6 +78,7 @@ export default function Application(props) {
       interview={interview}
       interviewers={interviewers}
       bookInterview={bookInterview}
+      cancelInterview={cancelInterview}
     />);
   })
 
