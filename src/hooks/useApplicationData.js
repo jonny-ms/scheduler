@@ -22,7 +22,6 @@ export default function useApplicationData() {
       case SET_APPLICATION_DATA:
         return { ...state, days: action.value.days, appointments: action.value.appointments, interviewers: action.value.interviewers }
       case SET_INTERVIEW:
-        // console.log("in switch", action.value.days)
         return { ...state, appointments: action.value.appointments, days: action.value.days }
       default:
         throw new Error(
@@ -39,14 +38,7 @@ export default function useApplicationData() {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers"),
     ]).then((all) => {
-      dispatch({ type: SET_APPLICATION_DATA, value: { days: all[0].data, appointments: all[1].data, interviewers: all[2].data } }
-        // prev => ({
-        // ...prev,
-        // days: all[0].data,
-        // appointments: all[1].data,
-        // interviewers: all[2].data
-      // })
-      )
+      dispatch({ type: SET_APPLICATION_DATA, value: { days: all[0].data, appointments: all[1].data, interviewers: all[2].data } })
     })
   }, []);
 
@@ -60,8 +52,12 @@ export default function useApplicationData() {
       [id]: appointment
     };
  
-    return axios.put(`/api/appointments/${id}`, appointment)
-      .then(() => dispatch({ type: SET_INTERVIEW, value: { appointments, days: updatedDays(state.days, id, true)}}))
+    return Promise.all([
+      axios.put(`/api/appointments/${id}`, appointment),
+      axios.get("/api/days"),
+    ]).then((all) => {
+      dispatch({ type: SET_INTERVIEW, value: { appointments, days: all[1].data}})
+    })
   };
 
   function cancelInterview(id) {
@@ -75,30 +71,13 @@ export default function useApplicationData() {
     };
 
 
-
-    return axios.delete(`/api/appointments/${id}`, state.appointments[id])
-      .then(() => {
-        dispatch({ type: SET_INTERVIEW, value: { appointments, days: updatedDays(state.days, id)} })
-      })
-  };
-
-  function updateSpots(spots, add = false) {
-
-    return add ? spots -= 1 : spots += 1
-  }
-  
-  function updatedDays(days, id, add = false) {
-    return days.map(day => {
-      if (!day.appointments.includes(id)) {
-        return day
-      }
-      return {
-        ...day,
-        spots: updateSpots(day.spots, add)
-      }
-
+    return Promise.all([
+      axios.delete(`/api/appointments/${id}`, state.appointments[id]),
+      axios.get("/api/days"),
+    ]).then((all) => {
+      dispatch({ type: SET_INTERVIEW, value: { appointments, days: all[1].data}})
     })
-  }
+  };
 
   return { state, setDay, bookInterview, cancelInterview }
 }
