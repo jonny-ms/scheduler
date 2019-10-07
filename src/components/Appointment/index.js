@@ -1,4 +1,4 @@
-import React, { useEffect }from "react";
+import React from "react";
 
 import "components/Appointment/styles.scss"
 import Header from "components/Appointment/Header"
@@ -32,7 +32,9 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
+
     transition(SAVING)
+    
     props.bookInterview(props.id, interview)
     .then(() => transition(SHOW))
     .catch(() => transition(ERROR_SAVE, true));
@@ -46,7 +48,7 @@ export default function Appointment(props) {
   }
 
   return (
-    <article className="appointment">
+    <article className="appointment" data-testid="appointment">
       <Header time={props.time} />
         {mode === EMPTY && <Empty onAdd={(() => transition(CREATE))} />}
         {mode === SHOW && (

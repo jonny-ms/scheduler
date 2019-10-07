@@ -42,11 +42,16 @@
     "@testing-library/react-hooks": "^2.0.1",
     "babel-loader": "^8.0.5",
     "node-sass": "^4.11.0",
+    "prop-types": "^15.7.2",
     "react-test-renderer": "^16.9.0"
   },
   "jest": {
     "watchPathIgnorePatterns": [
       "<rootDir>/node_modules/"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/index.js"
     ]
   },
   "proxy": "http://localhost:8001"

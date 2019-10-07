@@ -1,5 +1,9 @@
 # Interview Scheduler
 
+## Description
+
+A responsive single-page scheduler built using React (with Hooks) and using an API with a WebSocket server for a realtime experience.
+
 ## Setup
 
 Install dependencies with `npm install`.
