@@ -50,7 +50,7 @@ export default function useApplicationData() {
       }
     };
     
-  })
+  }, [])
   
   function updateSpots(appointments) {
     return state.days.map(day => {
