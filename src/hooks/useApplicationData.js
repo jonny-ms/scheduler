@@ -23,12 +23,16 @@ export default function useApplicationData() {
     })
   }, []);
 
+  //WebSocket. When setting interview. WebSocket message sent and received with interview data. Dispatch new state.
   useEffect(() => {
     const socket = new WebSocket ("ws://localhost:8001")
     socket.onopen = function(event) {
       socket.onmessage = function(event) {
+
         const parsedData = JSON.parse(event.data)
+
           if (parsedData.type === "SET_INTERVIEW") {
+
             const id = parsedData.id
             const interview = parsedData.interview
 
@@ -41,14 +45,14 @@ export default function useApplicationData() {
               [id]: appointment
             };
 
-            dispatch({type: SET_INTERVIEW, value: { appointments, days: updatedDays(appointments)}})
+            dispatch({type: SET_INTERVIEW, value: { appointments, days: updateSpots(appointments)}})
         }
       }
     };
     
   })
   
-  function updatedDays(appointments) {
+  function updateSpots(appointments) {
     return state.days.map(day => {
       let result = 0
       day.appointments.forEach( id => {
@@ -75,7 +79,7 @@ export default function useApplicationData() {
  
     return axios.put(`/api/appointments/${id}`, appointment)
       .then(() => {
-        dispatch({ type: SET_INTERVIEW, value: { appointments, days: updatedDays(appointments)}})
+        dispatch({ type: SET_INTERVIEW, value: { appointments, days: updateSpots(appointments)}})
       })
   };
 
@@ -92,7 +96,7 @@ export default function useApplicationData() {
 
     return axios.delete(`/api/appointments/${id}`, state.appointments[id])
       .then(() => {
-        dispatch({ type: SET_INTERVIEW, value: { appointments, days: updatedDays(appointments)} })
+        dispatch({ type: SET_INTERVIEW, value: { appointments, days: updateSpots(appointments)} })
       })
   };
 

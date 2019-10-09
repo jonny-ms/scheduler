@@ -17,7 +17,8 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9009 -s public --ci",
     "build-storybook": "build-storybook -s public",
-    "cypress": "cypress open -P ."
+    "cypress": "cypress open -P .",
+    "prettier-watch": "onchange '**/*.js' -- prettier --write {{changed}}"
   },
   "browserslist": {
     "production": [
@@ -43,6 +44,7 @@
     "@testing-library/react-hooks": "^2.0.1",
     "babel-loader": "^8.0.5",
     "node-sass": "^4.11.0",
+    "prettier": "1.18.2",
     "prop-types": "^15.7.2",
     "react-test-renderer": "^16.9.0"
   },
