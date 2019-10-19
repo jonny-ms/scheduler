@@ -6,6 +6,10 @@ A responsive single-page scheduler built using React (with Hooks) and using an A
 Storybook used to build and view React components in isolation.
 Integration tests implemented using Jest. End-to-end testing implemented using Cypress.
 
+To visit my deployed scheduler: https://distracted-euler-113c4b.netlify.com/
+
+To set up locally, the back end API is needed and can be found here: https://github.com/jonny-ms/scheduler-api. Follow README instructions to set up database.
+
 ## Screenshots
 
 !["Add an interview"](./public/images/add_interview.gif) 
